@@ -1068,9 +1068,6 @@ Enabling Quants will change the logic to visualise the colors of the judgement y
 
 		Paths.locale = ClientPrefs.locale;
 
-		if (Main.fpsVar != null)
-			Main.fpsVar.visible = ClientPrefs.showFPS;
-
 		#if FUNNY_ALLOWED
 		if (Main.bread != null)
 			Main.bread.visible = ClientPrefs.bread;
