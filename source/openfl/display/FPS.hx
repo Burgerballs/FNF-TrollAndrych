@@ -70,10 +70,6 @@ class FPS extends TextField
 	function onGameResized(windowWidth, ?windowHeight)
 		align = align;
 
-	@:noCompletion private var cacheCount:Int;
-	@:noCompletion private var currentTime:Float;
-	@:noCompletion private var times:Array<Float>;
-
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0xFFFFFF)
 	{
 		super();
@@ -97,11 +93,6 @@ class FPS extends TextField
 
 		multiline = true;
 		text = "FPS: ";
-
-		////
-		cacheCount = 0;
-		currentTime = 0;
-		times = [];
 
 		////
 		addEventListener(Event.ADDED_TO_STAGE, (e:Event)->{
@@ -137,28 +128,25 @@ class FPS extends TextField
 		#end
 	}
 
+
+	var balls:Int = 0;
+	var lastRefreshTime:Float = 0;
+	var elapsedTime:Float = 0;
 	// Event Handlers
 	@:noCompletion
 	private #if !flash override #end function __enterFrame(deltaTime:Float):Void
 	{
-		currentTime += deltaTime;
 		alpha = ClientPrefs.fpsOpacity;
 		background = ClientPrefs.fpsBG;
+		elapsedTime += deltaTime;
 
-		times.push(currentTime);
+		balls++;
 
-		while (times[0] < currentTime - 1000)
+		while (lastRefreshTime < elapsedTime - 1000)
 		{
-			times.shift();
-		}
-		var currentCount = times.length;
-		currentFPS = Math.ffloor((currentCount + cacheCount) * 0.5);
-		if (currentFPS > FlxG.drawFramerate && canLie)
-			currentFPS = FlxG.drawFramerate;
+			var currentCount = balls;
+			currentFPS = balls;
 
-		if (currentCount != cacheCount)
-		{
-			cacheCount = currentCount;
 
 			generateFpsText();
 
@@ -176,20 +164,22 @@ class FPS extends TextField
 			text += "\nstageDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE);
 			text += "\nstage3DDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE3D);
 			#end
+			balls = 0;
+				lastRefreshTime = elapsedTime;
 		}
 	}
 
-	private function generateFpsText() {
+	private inline function generateFpsText() {
 		switch (ClientPrefs.fpsStyle) {
 			case 'Funkin' | 'Psych':
 				text = 'FPS: $currentFPS';
 				if (showMemory) // Credit to Rudyrue and Leather128 for this one
-					text += ' \nMemory: [APP: ${FlxStringUtil.formatBytes(appMemoryInBytes)} | GC: ${FlxStringUtil.formatBytes(gcMemoryInBytes)}]';
+					text += ' \nMemory: ${FlxStringUtil.formatBytes(gcMemoryInBytes)}';
 			default:
 				text = 'FPS: $currentFPS';
 			
 				if (showMemory) // Credit to Rudyrue and Leather128 for this one
-					text += ' • Memory: [APP: ${FlxStringUtil.formatBytes(appMemoryInBytes)} | GC: ${FlxStringUtil.formatBytes(gcMemoryInBytes)}]';
+					text += ' • Memory: ${FlxStringUtil.formatBytes(gcMemoryInBytes)}';
 		}
 	}
 }

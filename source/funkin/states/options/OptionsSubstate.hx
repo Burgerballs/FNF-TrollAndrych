@@ -226,6 +226,7 @@ class OptionsSubstate extends MusicBeatSubstate
 	public var goBack:(Array<String>)->Void;
 	public function save(){
 		ClientPrefs.save(actualOptions);
+		
 		funkin.data.Highscore.loadData();
 	}
 	

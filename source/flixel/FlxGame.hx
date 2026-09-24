@@ -747,10 +747,6 @@ class FlxGame extends Sprite
 		FlxG.cameras.update(FlxG.elapsed);
 		FlxG.signals.postUpdate.dispatch();
 
-		#if FLX_DEBUG
-		debugger.stats.flixelUpdate(getTicks() - ticks);
-		#end
-
 		#if FLX_POINTER_INPUT
 		FlxArrayUtil.clearArray(FlxG.swipes);
 		#end

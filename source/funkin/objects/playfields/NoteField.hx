@@ -306,7 +306,7 @@ class NoteField extends FieldBase
 	override function draw()return;
 	
 
-	function getPoints(hold:Note, ?wid:Float, speed:Float, vDiff:Float, diff:Float, spiralHolds:Bool = false, ?lookAhead:Float = 1):Array<Vector3>
+	inline function getPoints(hold:Note, ?wid:Float, speed:Float, vDiff:Float, diff:Float, spiralHolds:Bool = false, ?lookAhead:Float = 1):Array<Vector3>
 	{ // stolen from schmovin'
 		if (hold.frame == null)
 			return [Vector3.ZERO, Vector3.ZERO];
@@ -357,7 +357,7 @@ class NoteField extends FieldBase
 	}
 
 	var crotchet:Float = Conductor.getCrotchetAtTime(0.0) / 4.0;
-	function drawHold(hold:Note, ?prevAlpha:Float, ?prevGlow:Float):Null<RenderObject>
+	inline function drawHold(hold:Note, ?prevAlpha:Float, ?prevGlow:Float):Null<RenderObject>
 	{
 		if (hold.animation.curAnim == null || hold.scale == null || hold.frame == null)
 			return null;
